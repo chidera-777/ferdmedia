@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Create an account{% endblock %}
+{% block content %}
+<h1 class="pb-2 mt-1 mb-3 text-center fw-bold" style="color:#333">Create an account</h1>
+<p class="text-center" style="color:#888;">Please fill the form below</p>
+<form method="post">
+  {% csrf_token %}
+  {{ user_form.as_p }}
+  <p><input type="submit" value="Sign-Up"/></p>
+</form>
+<p class="text-center fs-5">Already have an account? <a class="fw-bold text-decoration-none" style="color:rgba(0,127,255);"href="{% url 'login' %}">Login</a></p>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Log-In{% endblock %}
+{% block content %}
+<h1 class="pb-2 mt-1 mb-3 text-center fw-bold" style="color:#333">Log-In</h1>
+{% if form.errors %}
+{% else %}
+  <p class="text-center" style="color:#888;">Please Enter your login details</p>
+{% endif %}
+<form action="{% url 'login' %}" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="hidden" name="next" value="{{ next }}" />
+  <p class="text-end d-inline-block w-100" style="margin-top:-15px;"><a class="text-decoration-none fw-bold fs-6" style="color:rgba(0,127,255);" href="{% url 'password_reset'%}">Forgotten Password?</a></p>
+  <p><input type="submit" value="Log-in"/></p><br/>
+  <div class="text-center" ><hr class="d-inline-block " style=" width:35%; margin:5px 10px; border:1px solid #333;" /><span class="fw-bold fs-6">OR</span><hr class=" d-inline-block " style="width:35%; margin:5px 10px; border:1px solid #333;" /></div>
+   <p class="d-inline-block text-center" style="padding:30px 20px;"><a href="{% url 'register' %}" style="font-weight:bold; background:#17a500; color:#fff; font-size:14px; padding:10px 20px; text-transform:uppercase; text-decoration:none; border-radius:8px;">Create an Account</a></p>
+</form>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Logged Out{% endblock %}
+{% block content %}
+ <h1 class="pb-2 mt-1 mb-3 text-center fw-bold" style="color:#333">Logged-Out</h1>
+ <p class="fs-5">You have been successfully logged out</p>
+ <a href="{% url 'login' %}" style="font-weight:bold; background:rgba(0,127,255);color:#fff; padding:10px 20px;font-size:14px;text-transform:uppercase;text-decoration:none;">log in again</a>
+{% endblock %}
