@@ -2,5 +2,9 @@
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <h1 class="pb-2 mt-1 mb-3 text-center fw-bold" style="color:#333">Dashboard</h1>
-<p>Welcome to your dashboard<a href="{% url 'edit' %}">edit</a></p>
+{% with total_images_created=request.user.images_created.count %}
+<p>Welcome to your dashboard. You have saved {{ total_images_created }} image{{ total_images_created|pluralize }}.</p>
+<p>Drag the button to your toolbar to save images from other websites <i class="fa-solid fa-angle-left"></i> <a href="javascript:{% include "bookmarklet_launcher.js" %}" style="font-weight:bold; background:rgba(0,127,255);color:#fff; padding:5px 20px;font-size:14px;text-transform:uppercase;text-decoration:none;">Save it!</a></p>
+<p>You can visit your profile and settings <a href="{% url 'menu' %}">here</a></p>
+{% endwith %}
 {% endblock %}

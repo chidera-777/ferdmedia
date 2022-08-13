@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ferdmedia/', include('ferdmedia.urls')),
+    path('images/', include('images.urls', namespace='images'))
 ]
 
 if settings.DEBUG:

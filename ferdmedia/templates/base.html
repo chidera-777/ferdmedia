@@ -42,7 +42,7 @@
         font-size:14px;
        }
        
-       input{
+       input, textarea{
          border-radius:8px;
          width:100%
        }
@@ -74,9 +74,66 @@
           border: none;
         }
         
+        /* messages */
+        ul.messages {
+           margin:10px 10px;
+           padding:0;
+           list-style-type:none;
+          }
+        ul.messages li.success,
+        ul.messages li.warning,
+        ul.messages li.error,
+        ul.messages li.info {
+            margin:0;
+            padding:14px 20px;
+            list-style:none;
+            color:#fff;
+          }
+
+        ul.messages li.success { background:#81ce81; }
+        ul.messages li.success a { color:#0ac33e; }
+
+       ul.messages li.error { background:#a30029; color:#e9828e; }
+        ul.messages li.error a { color:#e9828e; }
+
+        ul.messages li.info { background:#faffae; color:#696b4e; }
+        ul.messages li.info a { color:#1586de; }
+
+        ul.messages li.warning { background:#de9404; }
+        ul.messages li.warning a { color:#f49000; }
+
+        ul.messages li a.close {
+            margin:0;
+            float:right;
+            opacity:1;
+            font-size: 19px;
+            border:none;
+          }
+          #selected a{
+            color: rgba(0,127,255);
+          }
+          #liked i{
+            color: rgba(0,127,255);
+          }
+          .icolor a{
+            color:#777;
+          }
+        
         @media only screen and (min-width:900px){
           form{
             margin:0 250px;
+          }
+         ul.messages li.success,
+        ul.messages li.warning,
+        ul.messages li.error,
+        ul.messages li.info {
+            margin:0;
+            padding:14px 20px;
+            list-style:none;
+            color:#fff;
+          }
+          ul.messages {
+           margin:10px 250px;
           }
         }
   </style>
@@ -86,21 +143,21 @@
       <span class="me-3 fw-bolder" style="font-family: 'Lato', sans-serif; color:rgba(0,127,255);font-size:30px;">ferdmedia</span>
       {% if request.user.is_authenticated %}
         <ul class="row m-0 p-0 list-unstyled">
-          <li class=" col mt-5 text-center" {% if section == 'dashboard' %}{% endif %}>
-             <a class="text-decoration-none" href="{% url 'dashboard' %}"><i class="fa-solid fa-house-user fa-lg "></i> </a>
+          <li class="icolor col mt-5 text-center" {% if section == 'dashboard' %}id="selected"{% endif %}>
+             <a class="text-decoration-none" href="{% url 'dashboard' %}"><i class="fa-solid fa-house-user fa-lg "></i></a>
           </li>
-          <li class=" col mt-5 text-center" {% if section == 'images' %}{% endif %}>
-             <a class="text-decoration-none" href="#"><i class="fa-brands fa-facebook-messenger fa-lg"></i></a>
+          <li class="icolor col mt-5 text-center" {% if section == 'images' %}id="selected"{% endif %}>
+            <a class="text-decoration-none" href="{% url 'images:list' %}"><i class="fa-solid fa-images fa-lg"></i></a>
           </li>
-          <li class="select col mt-5 text-center" {% if section == 'people' %}{% endif %}>
-            <a class="text-decoration-none" href="#"><i class="fa-solid fa-images fa-lg"></i></a>
+          <li class="icolor col mt-5 text-center" {% if section == 'menu' %}id="selected"{% endif %}>
+             <a class="text-decoration-none" href="{% url 'menu' %}"><i class="fa-solid fa-bars fa-lg"></i></a>
           </li>
         </ul>
       {% endif %}
       <span>
         {% if request.user.is_authenticated %}
-          <p class="float-end m-2 fw-normal position-absolute" style="top:40%; right:5%;font-size:17px;">Hello {{ request.user.first_name }},
-              <a class="text-decoration-none" style="font-size:12px;" href="{% url 'logout' %}">Logout</a>
+          <p class="float-end mb-5 fw-normal position-absolute" style="top:35%; right:5%;font-size:17px;">Hello {{ request.user.first_name }},
+              <a class="text-end d-block text-decoration-none" style="font-size:15px;" href="{% url 'logout' %}">Logout</a>
           </p>
         {% else %}  
           <a class="float-end fs-5 m-2 text-decoration-none fw-normal" href="{% url 'login' %}">Login</a>
@@ -108,8 +165,38 @@
       </span>
     </div>
     <div class="py-5 px-3" style="margin-top:80px;">
+       {% if messages %}
+         <ul class="messages">
+           {% for message in messages %}
+           <li class="{{ message.tags }}"> <strong>{{ message|safe }}</strong>
+             <a href="#" class="close" >×</a>
+           </li>
+           {% endfor %}
+         </ul>
+       {% endif %}
       {% block content %}
       {% endblock %}
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.1/src/js.cookie.min.js"></script>
+    <script>
+      var csrftoken = Cookies.get('csrftoken');
+      function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings)   {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+        }
+      });
+
+      $(document).ready(function(){
+        {% block domready %}
+        {% endblock %}
+      });
+    </script>
   </body>
   <html>
